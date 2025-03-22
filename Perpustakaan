@@ -1,0 +1,151 @@
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Scanner;
+
+public class Perpustakaan {
+
+    // Class untuk data Buku
+    static class Buku {
+        int id;
+        String judul;
+        String penulis;
+
+        Buku(int id, String judul, String penulis) {
+            this.id = id;
+            this.judul = judul;
+            this.penulis = penulis;
+        }
+
+        public String toString() {
+            return "ID: " + id + ", Judul: " + judul + ", Penulis: " + penulis;
+        }
+    }
+
+    // ArrayList untuk menyimpan data buku
+    static ArrayList<Buku> daftarBuku = new ArrayList<>();
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        int pilihan;
+        do {
+            tampilMenu();
+            System.out.print("Pilih menu (1-6): ");
+            pilihan = scanner.nextInt();
+            scanner.nextLine(); // Membersihkan buffer
+            switch (pilihan) {
+                case 1:
+                    tampilMenu();
+                    break;
+                case 2:
+                    tambahBuku();
+                    break;
+                case 3:
+                    hapusBuku();
+                    break;
+                case 4:
+                    tampilkanSemuaBuku();
+                    break;
+                case 5:
+                    cariBuku();
+                    break;
+                case 6:
+                    urutkanBuku();
+                    break;
+                case 7:
+                    System.out.println("Keluar dari program. Terima kasih!");
+                    break;
+                default:
+                    System.out.println("Pilihan tidak valid! Coba lagi.");
+            }
+        } while (pilihan != 7);
+    }
+
+    // 1. Menampilkan menu
+    static void tampilMenu() {
+        System.out.println("\n=== MENU PERPUSTAKAAN ===");
+        System.out.println("1. Tampilkan Menu");
+        System.out.println("2. Tambah 1 Data Buku");
+        System.out.println("3. Hapus 1 Data Buku");
+        System.out.println("4. Tampilkan Semua Data Buku");
+        System.out.println("5. Pencarian Data Buku (Judul)");
+        System.out.println("6. Pengurutan Data Buku (ID)");
+        System.out.println("7. Keluar");
+    }
+
+    // 2. Menambah data buku
+    static void tambahBuku() {
+        System.out.print("Masukkan ID Buku: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Membersihkan buffer
+        System.out.print("Masukkan Judul Buku: ");
+        String judul = scanner.nextLine();
+        System.out.print("Masukkan Nama Penulis: ");
+        String penulis = scanner.nextLine();
+
+        daftarBuku.add(new Buku(id, judul, penulis));
+        System.out.println("Data buku berhasil ditambahkan!");
+    }
+
+    // 3. Menghapus data buku
+    static void hapusBuku() {
+        System.out.print("Masukkan ID Buku yang ingin dihapus: ");
+        int id = scanner.nextInt();
+        scanner.nextLine(); // Membersihkan buffer
+
+        boolean ditemukan = false;
+        for (Buku buku : daftarBuku) {
+            if (buku.id == id) {
+                daftarBuku.remove(buku);
+                ditemukan = true;
+                System.out.println("Data buku dengan ID " + id + " berhasil dihapus.");
+                break;
+            }
+        }
+        if (!ditemukan) {
+            System.out.println("Buku dengan ID " + id + " tidak ditemukan!");
+        }
+    }
+
+    // 4. Menampilkan semua data buku
+    static void tampilkanSemuaBuku() {
+        if (daftarBuku.isEmpty()) {
+            System.out.println("Tidak ada data buku.");
+        } else {
+            System.out.println("\n=== DAFTAR BUKU ===");
+            for (Buku buku : daftarBuku) {
+                System.out.println(buku);
+            }
+        }
+    }
+
+    // 5. Pencarian data berdasarkan judul
+    static void cariBuku() {
+        System.out.print("Masukkan judul buku yang dicari: ");
+        String keyword = scanner.nextLine();
+
+        boolean ditemukan = false;
+        for (Buku buku : daftarBuku) {
+            if (buku.judul.equalsIgnoreCase(keyword)) {
+                System.out.println("Data buku ditemukan: " + buku);
+                ditemukan = true;
+                break;
+            }
+        }
+        if (!ditemukan) {
+            System.out.println("Buku dengan judul \"" + keyword + "\" tidak ditemukan.");
+        }
+    }
+
+    // 6. Pengurutan data buku berdasarkan ID
+    static void urutkanBuku() {
+        if (daftarBuku.isEmpty()) {
+            System.out.println("Tidak ada data untuk diurutkan.");
+        } else {
+            Collections.sort(daftarBuku, Comparator.comparingInt(buku -> buku.id));
+            System.out.println("Data buku berhasil diurutkan berdasarkan ID.");
+            tampilkanSemuaBuku();
+        }
+    }
+}
+
